@@ -1,0 +1,51 @@
+.dashboard{
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    flex-direction: row;
+}
+
+.sidebarContainer {
+    width: 250px;
+    height: 100vh;
+    background-color: #0e141a;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: fixed;
+}
+
+.sideButtons{
+    display: flex;
+    justify-content:left;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 20px 10px;
+}
+
+.sideButtons img{
+    box-sizing: border-box;
+    margin: 5px;
+}
+
+.sidebarContainer button{
+    width: 100%;
+    font-size: 20px;
+    color: white;
+    text-align: left;
+}
+  
+.sidebarContainer h1 {
+    color: #ecf0f1;
+    margin-bottom: 20px;
+}
+  
+.tabContent {
+    margin-top: 20px;
+    color: #ecf0f1;
+    margin-left: 250px;
+}
+  
+
+  

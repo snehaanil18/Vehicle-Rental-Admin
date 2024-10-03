@@ -1,0 +1,75 @@
+.container{
+    width: 600px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    padding: 20px 50px;
+    margin: 20px 80px;
+    background-color: #f9f9f9;
+   
+}
+
+.container form{
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+}
+
+.formContent label{
+    font-weight: bold;
+    color: black;
+    margin-bottom: 5px;
+}
+
+.formContent select, .formContent input, .formContent textarea{
+    padding: 10px;
+    border: 1px solid #9b9b9b; 
+    border-radius: 4px;
+    outline-color: #9b9b9b;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.formContent select:focus, .formContent input:focus, .formContent textarea:focus{
+    border-color: rgb(252, 156, 48);
+    outline: none;
+ 
+}
+
+.formContent input[type="file"]{
+    border: none;
+}
+
+.models{
+    display: flex;
+    flex-direction: column;
+}
+
+.images{
+    color: black;
+    list-style: none;
+    font-size: smaller;
+    display: flex;
+    gap: 10px;
+    margin-left: 30px
+}
+
+.Button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.addButton{
+    background-color: rgb(252, 156, 48);
+    padding: 10px;
+}
+
+.info{
+    color: #808080;
+    font-size: 14px;
+}
+
+.error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 0.2em;
+  }

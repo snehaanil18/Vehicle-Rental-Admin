@@ -1,0 +1,8 @@
+.inputField{
+    display: flex;
+    flex-direction: column;
+}
+
+.inputField input{
+    padding: 10px;
+}
