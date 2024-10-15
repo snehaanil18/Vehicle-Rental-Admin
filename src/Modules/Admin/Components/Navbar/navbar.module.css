@@ -1,7 +1,8 @@
 .Navbar{
     margin-left: 200px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 25px;
 }
 
 .search input{
@@ -11,6 +12,20 @@
     border: 1px solid rgb(187, 187, 187);
 }
 
+.buttons{
+    display: flex;
+    gap: 10px;
+}
+
 .buttons button{
     padding: 5px;
+}
+
+.blank{
+    width: 477px;
+    height: 37px;
+}
+
+.loading{
+    margin-left: 100px;
 }

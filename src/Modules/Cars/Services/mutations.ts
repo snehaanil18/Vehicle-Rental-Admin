@@ -9,9 +9,9 @@ export const ADD_VEHICLE_MUTATION = gql`
     $manufacturer: String!,
     $vehicletype: String!,
     $transmission: String!,
-    $fueltype: String!,  
-    $primaryimage: Upload!,
-    $otherimages: [Upload]!
+    $fueltype: String!,
+    $images: [Upload]!,
+    $primaryimageindex: Int!,
     $quantity: Int!
   ) {
     addVehicle(
@@ -22,21 +22,16 @@ export const ADD_VEHICLE_MUTATION = gql`
       manufacturer: $manufacturer,
       vehicletype: $vehicletype,
       transmission: $transmission,
-      fueltype: $fueltype,       
-      primaryimage: $primaryimage,
-      otherimages: $otherimages,
+      fueltype: $fueltype,
+      images: $images,
+      primaryimageindex: $primaryimageindex,
       quantity: $quantity
     ) {
       id
       name
-      primaryimage
-      otherimages
-      quantity
-      transmission     
-      fueltype  
     }
   }
-`;
+`; 
 
 export const GET_ALL_VEHICLES = gql`
   query GetAllVehicles {
@@ -74,21 +69,45 @@ export const GET_VEHICLE = gql`
   }
 `;
 
-export const GET_ALL_MANUFACTURERS = gql`
-    query {
-        getAllManufacturers {
-            id
-            name
-        }
+export const UPDATE_VEHICLE = gql`
+mutation UpdateVehicle(
+  $id: ID!
+  $name: String
+  $description: String
+  $price: Float
+  $quantity: Int!
+) {
+  updateVehicle(
+    id: $id
+    name: $name
+    description: $description
+    price: $price
+    quantity: $quantity
+  ) {
+    success
+    message
+    vehicle {
+      id
+      name
+      description
+      price
+      quantity
+    
     }
+  }
+}
 `;
 
-export const GET_MODELS_BY_MANUFACTURER = gql`
-query GetModelsByManufacturer($manufacturerId: ID!) {
-    getModelsByManufacturer(manufacturerId: $manufacturerId) {
-        id
-        name
-        year
+export const UPDATE_VEHICLE_IMAGES = gql`
+  mutation UpdateVehicleImages($id: ID!, $images:[CombinedImageInput!]!) {
+    updateVehicleImages(id: $id, images: $images) {
+      message
     }
-}
+  }
+`;
+
+export const DELETE_VEHICLE = gql`
+  mutation DeleteVehicle($id: ID!) {
+    deleteVehicle(id: $id)
+  }
 `;

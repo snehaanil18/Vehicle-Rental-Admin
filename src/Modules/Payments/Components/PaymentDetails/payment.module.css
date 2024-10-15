@@ -1,0 +1,81 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    margin: 0 160px;
+}
+
+.container h1 {
+    
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.tableRow{
+    cursor: pointer;
+}
+
+.bookingsTable {
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.bookingsTable th, .bookingsTable td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+    font-size: 16px;
+}
+
+.view{
+    text-decoration: underline;
+    color: rgb(112, 166, 184);
+}
+
+.bookingsTable th {
+    background-color: #f4f4f4;
+    color: #555;
+}
+
+.bookingsTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.bookingsTable tr:hover {
+    background-color: #f1f1f1;
+}
+
+.expandedRow {
+    background-color: #f7f7f7;
+}
+
+.expandedContent {
+    padding: 10px;
+    background-color: #f9f9f9;
+
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.expandedContent p{
+    margin: 10px;
+}
+
+.paymentstatus {
+    padding: 5px 10px;
+    border-radius: 5px;
+
+}
+
+/* .paymentstatus.paid {
+    background-color: green;
+}
+
+.paymentstatus.unpaid {
+    background-color: red;
+}
+
+.paymentstatus.pending {
+    background-color: orange;
+} */

@@ -1,39 +1,97 @@
 "use client";
-import React from 'react'
-import { useQuery } from '@apollo/client';
-import {GET_ALL_VEHICLES} from '../../Services/mutations'
+import React, { useState } from 'react';
+import { useQuery, useMutation } from '@apollo/client';
+import { GET_ALL_VEHICLES, DELETE_VEHICLE } from '../../Services/mutations';
+import styles from './allCars.module.css';
 import Image from 'next/image';
-import styles from './allCars.module.css'
+import { Vehicle, VehicleListProps } from '@/Utils/Models/vehicle';
+import add from '@/Themes/Images/edit-3-svgrepo-com.svg';
+import EditVehicle from '../EditVehicle/editCar';
+import del from '@/Themes/Images/delete-svgrepo-com.svg'
 
-interface Vehicle {
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    primaryimage: string;
-  }
+const VehicleList: React.FC<VehicleListProps> = ({ vehicles }) => {
+    const { loading, error, data, refetch } = useQuery<{ getAllVehicles: Vehicle[] }>(GET_ALL_VEHICLES);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null); 
+    const [deleteVehicle] = useMutation(DELETE_VEHICLE, {
+        onCompleted: () => {
+            refetch(); 
+        },
+        onError: (error) => {
+            console.error('Error deleting vehicle:', error);
+        },
+    });
+    
 
-const VehicleList = () => {
-    const { loading, error, data } = useQuery<{ getAllVehicles: Vehicle[] }>(GET_ALL_VEHICLES);
-  
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error.message}</p>;
-  
+    if (loading) return <p className={styles.loading}>Loading...</p>;
+    if (error) return <p className={styles.error}>Error: {error.message}</p>;
+
+    const vehicleData = vehicles || data?.getAllVehicles || [];
+
+    const handleEdit = (vehicle: Vehicle) => {
+        setSelectedVehicle(vehicle);
+        setShowModal(true); // Show the modal
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        refetch(); 
+        setSelectedVehicle(null);
+       
+    };
+
+
+    const handleDelete = (id: string) => {
+        if (window.confirm('Are you sure you want to delete this vehicle?')) {
+            deleteVehicle({ variables: { id } });
+        }
+    };
+
     return (
-      <div className={styles.container}>
-        <h1>Vehicles</h1>
-        <ul>
-          {data?.getAllVehicles.map((vehicle: Vehicle) => (
-            <li key={vehicle.id}>
-              <h2>{vehicle.name}</h2>
-              <p>{vehicle.description}</p>
-              <p>Price: ${vehicle.price}</p>
-              <Image src={vehicle.primaryimage} alt={vehicle.name} height={200} width={300} />
-            </li>
-          ))}
-        </ul>
-      </div>
+        <div className={styles.container}>
+            <div className={styles.cardContainer}>
+                {vehicleData.map((vehicle: Vehicle) => (
+                    <div key={vehicle.id} className={styles.card}>
+                        <div className={styles.cardImg}>
+                            <Image src={vehicle.primaryimage} alt={vehicle.name} height={200} width={300} />
+                        </div>
+                        <div className={styles.content}>
+                            <div className={styles.title}>
+                                <h3 className={styles.cardTitle}>{vehicle.name}</h3>
+                                <div>
+                                    <button
+                                        onClick={() => handleEdit(vehicle)} className={styles.editButton} aria-label={`Edit ${vehicle.name}`}>
+                                        <Image src={add} alt='edit' height={20} width={20} />
+                                    </button>
+                                    <button onClick={() => handleDelete(vehicle.id)} disabled={loading}>
+                                        <Image src={del} alt='delete' height={20} width={25} />
+                                    </button>
+                                </div>
+
+                            </div>
+
+                            <div className={styles.description}>
+                                <details>
+                                    <summary>Description</summary>
+                                    {vehicle.description}
+                                </details>
+
+                            </div>
+                            <div>Transmission: {vehicle.transmission} </div>
+                            <div>Fuel type: {vehicle.fueltype} </div>
+                            <div>Price: {vehicle.price} </div>
+                            <div className={styles.qty}>Available Quantity: {vehicle.quantity}</div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Conditionally render the EditVehicleModal */}
+            {showModal && selectedVehicle && (
+                <EditVehicle vehicle={selectedVehicle} onClose={() => handleCloseModal()} />
+            )}
+        </div>
     );
-  };
-  
-  export default VehicleList;
+};
+
+export default VehicleList;

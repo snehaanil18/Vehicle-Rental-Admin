@@ -1,15 +1,17 @@
-// InputField.tsx
 import React from 'react';
+import styles from './field.module.css';
 
 interface InputFieldProps {
-  label: string;
+  label?: string;
   type: string;
   name: string;
-  value: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>;
-  onBlur: React.FocusEventHandler<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>;
+  value?: string | number | File | null;
   placeholder?: string;
-  required?: boolean;  // Add this line
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  className?: string;
+  readOnly?: boolean;
+  required?: boolean;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -17,23 +19,25 @@ const InputField: React.FC<InputFieldProps> = ({
   type,
   name,
   value,
-  onChange,
-  onBlur,
   placeholder,
-  required = false,  // Default value can be set
+  onChange,
+  onBlur, 
+  className = '',
+  required,
 }) => {
   return (
-    <div>
+    <div className={styles.inputField}>
       <label htmlFor={name}>{label}</label>
       <input
         type={type}
-        id={name}
         name={name}
-        value={value}
+        id={name}
+        value={type !== 'file' ? (value as string | number) : undefined}
+        placeholder={placeholder}
         onChange={onChange}
         onBlur={onBlur}
-        placeholder={placeholder}
-        required={required} // Use the required prop here
+        className={className}
+        required={required}
       />
     </div>
   );

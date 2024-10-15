@@ -1,36 +1,16 @@
 "use client";
 import { useMutation, useQuery } from '@apollo/client';
 import { useState, useEffect } from 'react';
-import { ADD_VEHICLE_MUTATION, GET_ALL_MANUFACTURERS, GET_MODELS_BY_MANUFACTURER } from '../../Services/mutations';
+import { ADD_VEHICLE_MUTATION} from '../../Services/mutations';
+import { GET_MODELS_BY_MANUFACTURER, GET_ALL_MANUFACTURERS } from  '@/Modules/Manufacturers/Services/mutations'
 import styles from './add.module.css';
 import InputField from '@/Utils/Components/InputField/InputField';
 import Button from '@/Utils/Components/Button/Button';
 import Swal from 'sweetalert2';
-
-interface VehicleDetails {
-  name: string;
-  description: string;
-  price: string;
-  model: string;
-  manufacturer: string;
-  quantity: string;
-  vehicletype: string;
-  transmission: string;
-  fueltype: string;
-  primaryimage: File | null;
-  otherimages: File[];
-}
-
-interface Manufacturer {
-  id: string;
-  name: string;
-}
-
-interface Model {
-  id: string;
-  name: string;
-  year: number;
-}
+import { VehicleDetails } from '@/Utils/Models/vehicle';
+import { Manufacturer, Model } from '@/Utils/Models/manufacturer';
+import Image from 'next/image';
+import remove from '@/Themes/Images/cross-circle-svgrepo-com.svg'
 
 const AddVehicleForm = () => {
   const [vehicleDetails, setVehicleDetails] = useState<VehicleDetails>({
@@ -43,14 +23,14 @@ const AddVehicleForm = () => {
     vehicletype: '',
     transmission: '',
     fueltype: '',
-    primaryimage: null,
-    otherimages: [],
+    images: [],
   });
 
   const [errorMessages, setErrorMessages] = useState<Partial<Record<keyof VehicleDetails, string>>>({});
   const [addVehicle] = useMutation(ADD_VEHICLE_MUTATION);
   const transmissionOptions = ['Manual', 'Automatic'];
   const fuelTypeOptions = ['Petrol', 'Diesel', 'Hybrid', 'Electric'];
+  const vehicleTypeOptions = ['SUV', 'Sedan', 'Truck', 'Coupe', 'Hatchback', 'Convertible', 'Wagon'];
 
   const { loading: loadingManufacturers, error: errorManufacturers, data: dataManufacturers } = useQuery<{ getAllManufacturers: Manufacturer[] }>(GET_ALL_MANUFACTURERS);
   const [selectedManufacturer, setSelectedManufacturer] = useState('');
@@ -58,9 +38,11 @@ const AddVehicleForm = () => {
   const [selectedModel, setSelectedModel] = useState('');
 
   const { loading: loadingModels, error: errorModels, data: dataModels } = useQuery(GET_MODELS_BY_MANUFACTURER, {
-    variables: { manufacturerId: selectedManufacturer },
+    variables: { manufacturerid: selectedManufacturer },
     skip: !selectedManufacturer,
   });
+
+  const [primaryimageindex, setPrimaryimageindex] = useState<number | null>(null);
 
   useEffect(() => {
     if (dataModels) {
@@ -79,94 +61,93 @@ const AddVehicleForm = () => {
     }));
   }, [selectedManufacturer, selectedModel, dataManufacturers, models]);
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const filesArray = Array.from(e.target.files);
+      setVehicleDetails((prevDetails) => ({
+        ...prevDetails,
+        images: [...prevDetails.images, ...filesArray],
+      }));
+    }
+  };
+
+  const handlePrimaryImageSelect = (index: number) => {
+    setPrimaryimageindex(index);
+  };
+  const handleRemoveImage = (index: number) => {
+    const updatedImages = vehicleDetails.images.filter((_, i) => i !== index);
+    setVehicleDetails((prevDetails) => ({
+      ...prevDetails,
+      images: updatedImages,
+    }));
+
+    // Reset primary image if it's removed
+    if (primaryimageindex === index) {
+      setPrimaryimageindex(null);
+    } else if (primaryimageindex !== null && primaryimageindex > index) {
+      // Adjust primary image index if images before it were removed
+      setPrimaryimageindex((prevIndex) => (prevIndex !== null ? prevIndex - 1 : null));
+    }
+  };
+
+  const validateField = (name: keyof VehicleDetails, value: string): string | undefined => {
+    switch (name) {
+      case 'name':
+        return !value ? 'Vehicle name is required.' : undefined;
+      case 'description':
+        return !value ? 'Description is required.' : undefined;
+      case 'price':
+        if (!value) return 'Price is required.';
+        if (parseFloat(value) <= 0) return 'Price must be a positive number.';
+        break;
+      case 'quantity':
+        if (!value) return 'Quantity is required.';
+        if (parseInt(value, 10) <= 0) return 'Quantity must be a positive integer.';
+        break;
+      case 'vehicletype':
+        return !value ? 'Vehicle type is required.' : undefined;
+      case 'transmission':
+        return !value ? 'Transmission type is required.' : undefined;
+      case 'fueltype':
+        return !value ? 'Fuel type is required.' : undefined;
+      case 'images':
+        return vehicleDetails.images.length === 0 ? 'At least one image is required.' : undefined;
+      default:
+        return undefined;
+    }
+  };
+
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
     setVehicleDetails(prevDetails => ({
       ...prevDetails,
       [name]: value,
     }));
-    validateForm();
+
+    const errorMessage = validateField(name as keyof VehicleDetails, value);
     setErrorMessages(prevErrors => ({
       ...prevErrors,
-      [name]: '',
+      [name]: errorMessage || '', // Clear error message if valid
     }));
   };
 
   const handleBlur = (event: React.FocusEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>) => {
-    const { name } = event.target;
-    validateForm(); // Validate on blur
-  };
-
-  const handlePrimaryImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] || null;
-    setVehicleDetails(prevDetails => ({
-      ...prevDetails,
-      primaryimage: file,
-    }));
+    const { name, value } = event.target;
+    const errorMessage = validateField(name as keyof VehicleDetails, value);
     setErrorMessages(prevErrors => ({
       ...prevErrors,
-      primaryimage: '',
+      [name]: errorMessage || '', // Clear error message if valid
     }));
-  };
-
-  const handleOtherImagesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      const filesArray = Array.from(files);
-      setVehicleDetails(prevDetails => ({
-        ...prevDetails,
-        otherimages: [...prevDetails.otherimages, ...filesArray],
-      }));
-    }
-  };
-
-  const validateForm = () => {
-    const { name, description, price, vehicletype, transmission, fueltype, primaryimage, quantity } = vehicleDetails;
-    const errors: Record<string, string> = {};
-
-    if (!name) {
-      errors.name = 'Vehicle name is required.';
-    }
-    if (!description) {
-      errors.description = 'Description is required.';
-    }
-    if (!price) {
-      errors.price = 'Price is required.';
-    } else if (parseFloat(price) <= 0) {
-      errors.price = 'Price must be a positive number.';
-    }
-    if (!quantity) {
-      errors.quantity = 'Quantity is required.';
-    } else if (parseInt(quantity, 10) <= 0) {
-      errors.quantity = 'Quantity must be a positive integer.';
-    }
-    if (!vehicletype) {
-      errors.vehicletype = 'Vehicle type is required.';
-    }
-    if (!transmission) {
-      errors.transmission = 'Transmission type is required.';
-    }
-    if (!fueltype) {
-      errors.fueltype = 'Fuel type is required.';
-    }
-    if (!primaryimage) {
-      errors.primaryimage = 'Primary image is required.';
-    }
-
-    setErrorMessages(errors);
-    return Object.keys(errors).length === 0; // Return true if there are no errors
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const isValid = validateForm();
-    if (!isValid) {
-      return; // Stop submission if validation fails
-    }
-
-    const { name, description, price, vehicletype, transmission, fueltype, primaryimage, otherimages, quantity } = vehicleDetails;
-
+    console.log('7',vehicleDetails.images,'4');
+    
+  
+    const { name, description, price, vehicletype, transmission, fueltype, images, quantity } = vehicleDetails;
+    console.log(images,'img');
+    
     try {
       await addVehicle({
         variables: {
@@ -179,16 +160,19 @@ const AddVehicleForm = () => {
           transmission,
           fueltype,
           vehicletype,
-          primaryimage,
-          otherimages,
+          images, 
+          primaryimageindex: primaryimageindex ?? 0,
         },
       });
+      
       Swal.fire({
         title: 'Success!',
         text: 'Vehicle added',
         icon: 'success',
         confirmButtonText: 'OK',
       });
+      
+      // Reset form state
       setVehicleDetails({
         name: '',
         description: '',
@@ -199,16 +183,24 @@ const AddVehicleForm = () => {
         vehicletype: '',
         transmission: '',
         fueltype: '',
-        primaryimage: null,
-        otherimages: [],
+        images: [],
       });
+      setPrimaryimageindex(null);
       setSelectedManufacturer('');
       setSelectedModel('');
+      
     } catch (err) {
       console.error('Error adding vehicle:', err);
+
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to add vehicle. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
     }
   };
-
+  
   if (loadingManufacturers) return <p>Loading manufacturers...</p>;
   if (errorManufacturers) return <p>Error fetching manufacturers: {errorManufacturers.message}</p>;
 
@@ -268,8 +260,8 @@ const AddVehicleForm = () => {
           onChange={handleChange}
           onBlur={handleBlur}
           placeholder="Enter vehicle description"
-          rows={4}  // Adjust the number of rows based on your preference
-          required
+          rows={4}
+          // required
         />
         {errorMessages.description && <p className={styles.error}>{errorMessages.description}</p>}
 
@@ -291,36 +283,25 @@ const AddVehicleForm = () => {
           value={vehicleDetails.quantity}
           onChange={handleChange}
           onBlur={handleBlur}
-          placeholder="Enter quantity"
-          required
+          placeholder="Quantity"
         />
         {errorMessages.quantity && <p className={styles.error}>{errorMessages.quantity}</p>}
 
-        <label htmlFor="vehicletype">Vehicle Type:</label>
-        <select
-          id="vehicletype"
-          name="vehicletype"
-          value={vehicleDetails.vehicletype}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        >
-          <option value="">Select vehicle type</option>
-          <option value="Car">Car</option>
-          <option value="Bike">Bike</option>
-          <option value="Truck">Truck</option>
+        <label htmlFor="manufacturer">Vehicle Type:</label>
+        <select name="vehicletype" value={vehicleDetails.vehicletype} onChange={handleChange} onBlur={handleBlur}>
+          <option value="">Select type</option>
+          {vehicleTypeOptions.map((type) => (
+            <option key={type} value={type}>
+              {type}
+            </option>
+          ))}
         </select>
         {errorMessages.vehicletype && <p className={styles.error}>{errorMessages.vehicletype}</p>}
 
-        <label htmlFor="transmission">Transmission:</label>
-        <select
-          id="transmission"
-          name="transmission"
-          value={vehicleDetails.transmission}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        >
+        <label htmlFor="manufacturer">Transmission:</label>
+        <select name="transmission" value={vehicleDetails.transmission} onChange={handleChange} onBlur={handleBlur}>
           <option value="">Select transmission</option>
-          {transmissionOptions.map(option => (
+          {transmissionOptions.map((option) => (
             <option key={option} value={option}>
               {option}
             </option>
@@ -328,16 +309,10 @@ const AddVehicleForm = () => {
         </select>
         {errorMessages.transmission && <p className={styles.error}>{errorMessages.transmission}</p>}
 
-        <label htmlFor="fueltype">Fuel Type:</label>
-        <select
-          id="fueltype"
-          name="fueltype"
-          value={vehicleDetails.fueltype}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        >
+        <label htmlFor="manufacturer">Fuel Type:</label>
+        <select name="fueltype" value={vehicleDetails.fueltype} onChange={handleChange} onBlur={handleBlur}>
           <option value="">Select fuel type</option>
-          {fuelTypeOptions.map(option => (
+          {fuelTypeOptions.map((option) => (
             <option key={option} value={option}>
               {option}
             </option>
@@ -345,28 +320,38 @@ const AddVehicleForm = () => {
         </select>
         {errorMessages.fueltype && <p className={styles.error}>{errorMessages.fueltype}</p>}
 
-        <label htmlFor="primaryimage">Primary Image:</label>
-        <input
-          type="file"
-          id="primaryimage"
-          name="primaryimage"
-          accept="image/*"
-          onChange={handlePrimaryImageChange}
-          onBlur={handleBlur}
-        />
-        {errorMessages.primaryimage && <p className={styles.error}>{errorMessages.primaryimage}</p>}
+        <div className={styles.addVehicleForm}>
+      <label htmlFor="image">Upload Images:</label>
+      <input type="file" multiple onChange={handleImageChange} />
+      {errorMessages.images && <p className={styles.error}>{errorMessages.images}</p>}
 
-        <label htmlFor="otherimages">Other Images:</label>
-        <input
-          type="file"
-          id="otherimages"
-          name="otherimages"
-          accept="image/*"
-          multiple
-          onChange={handleOtherImagesChange}
-        />
-
-        <Button type="submit" label='Add Vehicle' />
+      {vehicleDetails.images.length > 0 && (
+        <div className={styles.imagePreview}>
+          {vehicleDetails.images.map((image, index) => (
+            <div key={index} className={styles.imageContainer}>
+              <Image src={URL.createObjectURL(image)} alt={`Image ${index + 1}`} height={100} width={115} />
+              <div className={styles.imageActions}>
+                <label htmlFor={`primaryImage-${index}`}>
+                  <input
+                    type="checkbox"
+                    checked={primaryimageindex === index}
+                    onChange={() => handlePrimaryImageSelect(index)}
+                  />
+                  Primary Image
+                  </label>
+                <button id={styles.remove} type="button" onClick={() => handleRemoveImage(index)}>
+                  <Image src={remove} alt='remove' height={15} width={20} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+        <div className={styles.addButton}>
+          <Button type="submit" label="Add Vehicle" />
+        </div>
+       
       </form>
     </div>
   );

@@ -2,6 +2,8 @@
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
     flex-direction: row;
+    width: 100%;
+
 }
 
 .sidebarContainer {
@@ -21,7 +23,7 @@
     align-items: center;
     box-sizing: border-box;
     width: 100%;
-    margin: 20px 10px;
+    margin: 10px;
 }
 
 .sideButtons img{
@@ -43,9 +45,21 @@
   
 .tabContent {
     margin-top: 20px;
-    color: #ecf0f1;
+    color: #075b70;
     margin-left: 250px;
+    width: 100%;
 }
-  
+
+.settings{
+    margin: 0 30px;
+}
+
+.settings .sideButtons{
+    margin: 0;
+}
+
+.settings button{
+    font-size: 18px;
+}
 
   

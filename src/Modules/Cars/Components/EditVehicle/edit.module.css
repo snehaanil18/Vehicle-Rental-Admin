@@ -1,0 +1,134 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Transparent black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    color: black;
+    padding: 20px; /* Adds space around the modal */
+}
+
+.modalContent {
+    background-color: white;
+    max-height: 90vh; /* Ensures the modal doesn't overflow beyond the viewport */
+    overflow-y: auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    width: 100%;
+}
+
+.button {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.closeButton {
+    font-size: 24px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: #666;
+}
+
+.modalContent h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.modalContent form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modalContent form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.modalContent form input,
+.modalContent form textarea {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.modalContent form button {
+    padding: 10px 20px;
+    border: none;
+    background-color:rgb(252, 156, 48);
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.modalContent form button:hover {
+    background-color:rgb(180, 107, 23);
+}
+
+.imagePreview {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.imagePreview img {
+    margin-right: 10px;
+    border-radius: 8px;
+    object-fit: cover;
+    width: 100px;
+    height: 100px;
+}
+
+.imagePreview button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #d32f2f;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.imagePreview button:hover {
+    background-color: #b71c1c;
+}
+
+.modalContent h3 {
+    margin-bottom: 10px;
+    margin-top: 20px;
+    color: #333;
+}
+
+.newImagesPreview img {
+    max-width: 100px;
+    max-height: 100px;
+    margin-right: 10px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.newImagesPreview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.save{
+    margin-top: 10px;
+    justify-content: center;
+    display: flex;
+}
