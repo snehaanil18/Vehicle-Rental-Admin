@@ -6,6 +6,7 @@ import { ADD_VEHICLE_MUTATION } from '../../Services/mutations';
 import { useMutation } from '@apollo/client';
 import Swal from 'sweetalert2';
 import { DataDisplayProps } from '@/Utils/Models/data';
+import Image from 'next/image';
 
 
 const ExcelUpload: React.FC<DataDisplayProps> = ({ data }) => {
@@ -133,7 +134,7 @@ const ExcelUpload: React.FC<DataDisplayProps> = ({ data }) => {
         </thead>
         <tbody>
           {data.map((item, index) => (
-            <tr key={index} className={styles.tr}>
+            <tr key={index+1} className={styles.tr}>
               <td className={styles.td}>{item.name}</td>
               <td className={styles.td}>{item.description}</td>
               <td className={styles.td}>{item.price}</td>
@@ -161,7 +162,7 @@ const ExcelUpload: React.FC<DataDisplayProps> = ({ data }) => {
             <div className={styles.imagePreview}>
               {vehicleDetails.images.map((image, index) => (
                 <div key={index} className={styles.imageContainer}>
-                  <img src={URL.createObjectURL(image)} alt={`Image ${index + 1}`} height={100} width={115} />
+                  <Image src={URL.createObjectURL(image)} alt={`Image ${index + 1}`} height={100} width={115} />
                   <div className={styles.imageActions}>
                     <label>
                       <input
