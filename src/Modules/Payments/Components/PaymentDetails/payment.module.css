@@ -7,12 +7,11 @@
 }
 
 .container h1 {
-    
     margin-bottom: 20px;
     color: #333;
 }
 
-.tableRow{
+.tableRow {
     cursor: pointer;
 }
 
@@ -21,14 +20,15 @@
     margin-bottom: 20px;
 }
 
-.bookingsTable th, .bookingsTable td {
+.bookingsTable th,
+.bookingsTable td {
     padding: 12px 15px;
     border: 1px solid #ddd;
     text-align: left;
     font-size: 16px;
 }
 
-.view{
+.view {
     text-decoration: underline;
     color: rgb(112, 166, 184);
 }
@@ -58,7 +58,7 @@
     border-radius: 5px;
 }
 
-.expandedContent p{
+.expandedContent p {
     margin: 10px;
 }
 
@@ -67,15 +67,3 @@
     border-radius: 5px;
 
 }
-
-/* .paymentstatus.paid {
-    background-color: green;
-}
-
-.paymentstatus.unpaid {
-    background-color: red;
-}
-
-.paymentstatus.pending {
-    background-color: orange;
-} */

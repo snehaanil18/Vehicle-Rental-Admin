@@ -1,8 +1,8 @@
 "use client";
 import { useMutation, useQuery } from '@apollo/client';
 import { useState, useEffect } from 'react';
-import { ADD_VEHICLE_MUTATION} from '../../Services/mutations';
-import { GET_MODELS_BY_MANUFACTURER, GET_ALL_MANUFACTURERS } from  '@/Modules/Manufacturers/Services/mutations'
+import { ADD_VEHICLE_MUTATION } from '../../Services/mutations';
+import { GET_MODELS_BY_MANUFACTURER, GET_ALL_MANUFACTURERS } from '@/Modules/Manufacturers/Services/mutations'
 import styles from './add.module.css';
 import InputField from '@/Utils/Components/InputField/InputField';
 import Button from '@/Utils/Components/Button/Button';
@@ -11,6 +11,12 @@ import { VehicleDetails } from '@/Utils/Models/vehicle';
 import { Manufacturer, Model } from '@/Utils/Models/manufacturer';
 import Image from 'next/image';
 import remove from '@/Themes/Images/cross-circle-svgrepo-com.svg'
+import * as XLSX from 'xlsx';
+import ExcelUpload from '../ExcelUpload/excelUpload';
+
+interface ExcelRow {
+  [key: string]: string | number | boolean;
+}
 
 const AddVehicleForm = () => {
   const [vehicleDetails, setVehicleDetails] = useState<VehicleDetails>({
@@ -25,6 +31,32 @@ const AddVehicleForm = () => {
     fueltype: '',
     images: [],
   });
+  const [data, setData] = useState<ExcelRow[]>([]);
+  const [show,setShow] = useState(false)
+  const [send,setSend] = useState(false)
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const bstr = evt.target?.result;
+        const workbook = XLSX.read(bstr, { type: 'binary' });
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json<ExcelRow>(firstSheet);
+        setData(jsonData);
+      };
+      reader.readAsBinaryString(file);
+    }
+  };
+
+  const handleShow = () => {
+    setShow(!show)
+  }
+
+  const handleConsoleLog = () => {
+    setSend(true)
+  };
 
   const [errorMessages, setErrorMessages] = useState<Partial<Record<keyof VehicleDetails, string>>>({});
   const [addVehicle] = useMutation(ADD_VEHICLE_MUTATION);
@@ -52,13 +84,16 @@ const AddVehicleForm = () => {
   }, [dataModels]);
 
   useEffect(() => {
-    const manufacturerName = dataManufacturers?.getAllManufacturers.find(man => man.id === selectedManufacturer)?.name || '';
-    const modelName = models.find(mod => mod.id === selectedModel)?.name || '';
+    const manufacturerName = dataManufacturers?.getAllManufacturers.find(man => man.id === selectedManufacturer)?.name ?? '';
+    const modelName = models.find(mod => mod.id === selectedModel)?.name ?? '';
 
     setVehicleDetails(prevDetails => ({
       ...prevDetails,
       name: selectedManufacturer && selectedModel ? `${manufacturerName} ${modelName}` : '',
+      manufacturer: manufacturerName,
+      model: modelName
     }));
+
   }, [selectedManufacturer, selectedModel, dataManufacturers, models]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,6 +109,7 @@ const AddVehicleForm = () => {
   const handlePrimaryImageSelect = (index: number) => {
     setPrimaryimageindex(index);
   };
+  
   const handleRemoveImage = (index: number) => {
     const updatedImages = vehicleDetails.images.filter((_, i) => i !== index);
     setVehicleDetails((prevDetails) => ({
@@ -91,31 +127,44 @@ const AddVehicleForm = () => {
   };
 
   const validateField = (name: keyof VehicleDetails, value: string): string | undefined => {
+    const isEmpty = (value: string) => !value;
+
+    const isPositiveNumber = (value: string) => {
+      const numberValue = parseFloat(value);
+      return numberValue > 0;
+    };
+
+    const isPositiveInteger = (value: string) => {
+      const intValue = parseInt(value, 10);
+      return intValue > 0;
+    };
+
     switch (name) {
       case 'name':
-        return !value ? 'Vehicle name is required.' : undefined;
       case 'description':
-        return !value ? 'Description is required.' : undefined;
-      case 'price':
-        if (!value) return 'Price is required.';
-        if (parseFloat(value) <= 0) return 'Price must be a positive number.';
-        break;
-      case 'quantity':
-        if (!value) return 'Quantity is required.';
-        if (parseInt(value, 10) <= 0) return 'Quantity must be a positive integer.';
-        break;
       case 'vehicletype':
-        return !value ? 'Vehicle type is required.' : undefined;
       case 'transmission':
-        return !value ? 'Transmission type is required.' : undefined;
       case 'fueltype':
-        return !value ? 'Fuel type is required.' : undefined;
+        return isEmpty(value) ? `${name.charAt(0).toUpperCase() + name.slice(1)} is required.` : undefined;
+
+      case 'price':
+        if (isEmpty(value)) return 'Price is required.';
+        if (!isPositiveNumber(value)) return 'Price must be a positive number.';
+        break;
+
+      case 'quantity':
+        if (isEmpty(value)) return 'Quantity is required.';
+        if (!isPositiveInteger(value)) return 'Quantity must be a positive integer.';
+        break;
+
       case 'images':
         return vehicleDetails.images.length === 0 ? 'At least one image is required.' : undefined;
+
       default:
         return undefined;
     }
   };
+
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
@@ -127,7 +176,7 @@ const AddVehicleForm = () => {
     const errorMessage = validateField(name as keyof VehicleDetails, value);
     setErrorMessages(prevErrors => ({
       ...prevErrors,
-      [name]: errorMessage || '', // Clear error message if valid
+      [name]: errorMessage ?? '', 
     }));
   };
 
@@ -136,42 +185,41 @@ const AddVehicleForm = () => {
     const errorMessage = validateField(name as keyof VehicleDetails, value);
     setErrorMessages(prevErrors => ({
       ...prevErrors,
-      [name]: errorMessage || '', // Clear error message if valid
+      [name]: errorMessage ?? '', 
     }));
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('7',vehicleDetails.images,'4');
-    
-  
-    const { name, description, price, vehicletype, transmission, fueltype, images, quantity } = vehicleDetails;
-    console.log(images,'img');
-    
+
+
+
+    const { name, description, price, vehicletype, model, manufacturer, transmission, fueltype, images, quantity } = vehicleDetails;
+
     try {
       await addVehicle({
         variables: {
           name,
           description,
           price: parseFloat(price),
-          model: selectedModel,
-          manufacturer: selectedManufacturer,
+          model,
+          manufacturer,
           quantity: parseInt(quantity, 10),
           transmission,
           fueltype,
           vehicletype,
-          images, 
+          images,
           primaryimageindex: primaryimageindex ?? 0,
         },
       });
-      
+
       Swal.fire({
         title: 'Success!',
         text: 'Vehicle added',
         icon: 'success',
         confirmButtonText: 'OK',
       });
-      
+
       // Reset form state
       setVehicleDetails({
         name: '',
@@ -188,7 +236,7 @@ const AddVehicleForm = () => {
       setPrimaryimageindex(null);
       setSelectedManufacturer('');
       setSelectedModel('');
-      
+
     } catch (err) {
       console.error('Error adding vehicle:', err);
 
@@ -200,13 +248,25 @@ const AddVehicleForm = () => {
       });
     }
   };
-  
+
   if (loadingManufacturers) return <p>Loading manufacturers...</p>;
   if (errorManufacturers) return <p>Error fetching manufacturers: {errorManufacturers.message}</p>;
 
   return (
     <div className={styles.container}>
+      <div className={styles.import}>
+        <button onClick={handleShow}>Import from Excel</button>
+      </div>
+      {show && 
+              <div className={styles.excel}>
+              <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} />
+              <button onClick={handleConsoleLog}>Load Data</button>
+
+              {send && <ExcelUpload data={data}/>}
+            </div>
+      }
       <form className={styles.formContent} onSubmit={handleSubmit}>
+
         <label htmlFor="manufacturer">Manufacturer:</label>
         <select
           id="manufacturer"
@@ -261,7 +321,7 @@ const AddVehicleForm = () => {
           onBlur={handleBlur}
           placeholder="Enter vehicle description"
           rows={4}
-          // required
+        // required
         />
         {errorMessages.description && <p className={styles.error}>{errorMessages.description}</p>}
 
@@ -321,37 +381,37 @@ const AddVehicleForm = () => {
         {errorMessages.fueltype && <p className={styles.error}>{errorMessages.fueltype}</p>}
 
         <div className={styles.addVehicleForm}>
-      <label htmlFor="image">Upload Images:</label>
-      <input type="file" multiple onChange={handleImageChange} />
-      {errorMessages.images && <p className={styles.error}>{errorMessages.images}</p>}
+          <label htmlFor="image">Upload Images:</label>
+          <input type="file" multiple onChange={handleImageChange} />
+          {errorMessages.images && <p className={styles.error}>{errorMessages.images}</p>}
 
-      {vehicleDetails.images.length > 0 && (
-        <div className={styles.imagePreview}>
-          {vehicleDetails.images.map((image, index) => (
-            <div key={index} className={styles.imageContainer}>
-              <Image src={URL.createObjectURL(image)} alt={`Image ${index + 1}`} height={100} width={115} />
-              <div className={styles.imageActions}>
-                <label htmlFor={`primaryImage-${index}`}>
-                  <input
-                    type="checkbox"
-                    checked={primaryimageindex === index}
-                    onChange={() => handlePrimaryImageSelect(index)}
-                  />
-                  Primary Image
-                  </label>
-                <button id={styles.remove} type="button" onClick={() => handleRemoveImage(index)}>
-                  <Image src={remove} alt='remove' height={15} width={20} />
-                </button>
-              </div>
+          {vehicleDetails.images.length > 0 && (
+            <div className={styles.imagePreview}>
+              {vehicleDetails.images.map((image, index) => (
+                <div key={index} className={styles.imageContainer}>
+                  <Image src={URL.createObjectURL(image)} alt={`Image ${index + 1}`} height={100} width={115} />
+                  <div className={styles.imageActions}>
+                    <label htmlFor={`primaryImage-${index}`}>
+                      <input
+                        type="checkbox"
+                        checked={primaryimageindex === index}
+                        onChange={() => handlePrimaryImageSelect(index)}
+                      />
+                      Primary Image
+                    </label>
+                    <button id={styles.remove} type="button" onClick={() => handleRemoveImage(index)}>
+                      <Image src={remove} alt='remove' height={15} width={20} />
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
-      )}
-    </div>
         <div className={styles.addButton}>
           <Button type="submit" label="Add Vehicle" />
         </div>
-       
+
       </form>
     </div>
   );

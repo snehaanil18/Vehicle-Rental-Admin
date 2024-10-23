@@ -1,0 +1,48 @@
+/* ExcelUpload.module.css */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 1em;
+  text-align: left;
+}
+
+.th {
+  background-color: rgb(252, 156, 48);
+  color: white;
+  padding: 12px 15px;
+}
+
+.td {
+  border: 1px solid #ddd;
+  padding: 12px 15px;
+}
+
+.tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.tr:hover {
+  background-color: #ddd;
+}
+
+.addVehicleForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.button{
+  display: flex;
+  justify-content: center;
+}
+
+.imageContainer{
+  display: flex;
+}
+
+.imageActions{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: 20px;
+}

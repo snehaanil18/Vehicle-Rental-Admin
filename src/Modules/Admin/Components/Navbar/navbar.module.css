@@ -1,12 +1,12 @@
 .Navbar{
     margin-left: 200px;
     display: flex;
-    justify-content: flex-start;
-    gap: 25px;
+    justify-content: space-around;
+   
 }
 
 .search input{
-    width: 450px;
+    width: 700px;
     border-radius: 5px;
     outline: none;
     border: 1px solid rgb(187, 187, 187);
@@ -22,7 +22,7 @@
 }
 
 .blank{
-    width: 477px;
+    width: 720px;
     height: 37px;
 }
 

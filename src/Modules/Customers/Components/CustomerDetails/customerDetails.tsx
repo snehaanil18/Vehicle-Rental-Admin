@@ -5,16 +5,7 @@ import { GET_ALL_BOOKINGS_QUERY } from '../../Services/mutations';
 import styles from './customer.module.css';
 import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
-
-interface Booking {
-    id: string,
-    vehiclename: string,
-    pickupdate: string,
-    dropoffdate: string,
-    totalamount: string,
-    username: string,
-    paymentstatus: string,
-}
+import { Booking } from '@/Utils/Models/booking';
 
 function CustomerDetails() {
     const { data, loading, error, refetch } = useQuery(GET_ALL_BOOKINGS_QUERY);
@@ -58,7 +49,7 @@ function CustomerDetails() {
             const detailLines = doc.splitTextToSize(details, 180); // Split text to fit page width
             const lineHeight = 7; // Height of each line
     
-            detailLines.forEach((line) => {
+            detailLines.forEach((line: string) => {
                 // Check if the next line would exceed the page height
                 if (y + lineHeight > pageHeight) {
                     doc.addPage(); // Add a new page
@@ -157,7 +148,7 @@ function CustomerDetails() {
                                             <p><strong>Drop-off Date:</strong> {formatDate(booking.dropoffdate)}</p>
                                             <p><strong>Total Amount:</strong>  &#8377;{booking.totalamount}</p>
                                             <p><strong>Payment Status:</strong>
-                                                <span className={`${styles.paymentstatus} ${styles[booking.paymentstatus.toLowerCase()]}`}>
+                                                <span className={styles.paymentstatus}>
                                                     {booking.paymentstatus}
                                                 </span>
                                             </p>

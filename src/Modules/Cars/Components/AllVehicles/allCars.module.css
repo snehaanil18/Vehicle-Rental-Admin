@@ -76,3 +76,11 @@
     background: transparent;
     border: none;
 }
+
+.actions{
+    display: flex;
+}
+
+.actions button{
+    padding: 0;
+}

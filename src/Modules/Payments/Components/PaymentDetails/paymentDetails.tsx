@@ -3,14 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_PAYMENTS } from '../../Services/mutations';
 import styles from './payment.module.css';
-
-interface Payment {
-  id: string,
-  bookingid: string,
-  amountpaid: string,
-  status: string,
-  createdat: string,
-}
+import { Payment } from '@/Utils/Models/payment';
 
 function PaymentList() {
   const { data, loading, error, refetch } = useQuery(GET_ALL_PAYMENTS);

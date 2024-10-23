@@ -68,13 +68,15 @@ function AddManufacturers() {
                         <table className={styles.table}>
                             <thead>
                                 <tr>
+                                    <th>Sl. no</th>
                                     <th>Id</th>
                                     <th>Name</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {dataManufacturers?.getAllManufacturers.map((manufacturer) => (
+                                {dataManufacturers?.getAllManufacturers.map((manufacturer,index) => (
                                     <tr key={manufacturer.id}>
+                                        <td>{index+1}</td>
                                         <td>{manufacturer.id}</td>
                                         <td>{manufacturer.name}</td>
                                     </tr>

@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react';
-import { VehicleEdit } from '@/Utils/Models/vehicle';
+import { EditVehicleModalProps } from '@/Utils/Models/vehicle';
 import styles from './edit.module.css';
 import InputField from '@/Utils/Components/InputField/InputField';
 import Image from 'next/image';
@@ -8,10 +8,7 @@ import { useMutation } from '@apollo/client';
 import { UPDATE_VEHICLE, UPDATE_VEHICLE_IMAGES } from '../../Services/mutations';
 import Swal from 'sweetalert2';
 
-interface EditVehicleModalProps {
-    vehicle: VehicleEdit;
-    onClose: () => void;
-}
+
 
 const EditVehicle: React.FC<EditVehicleModalProps> = ({ vehicle, onClose }) => {
     const [formData, setFormData] = useState(vehicle);

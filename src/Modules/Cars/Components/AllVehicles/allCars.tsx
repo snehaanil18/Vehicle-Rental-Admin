@@ -8,6 +8,7 @@ import { Vehicle, VehicleListProps } from '@/Utils/Models/vehicle';
 import add from '@/Themes/Images/edit-3-svgrepo-com.svg';
 import EditVehicle from '../EditVehicle/editCar';
 import del from '@/Themes/Images/delete-svgrepo-com.svg'
+import Swal from 'sweetalert2';
 
 const VehicleList: React.FC<VehicleListProps> = ({ vehicles }) => {
     const { loading, error, data, refetch } = useQuery<{ getAllVehicles: Vehicle[] }>(GET_ALL_VEHICLES);
@@ -42,9 +43,23 @@ const VehicleList: React.FC<VehicleListProps> = ({ vehicles }) => {
 
 
     const handleDelete = (id: string) => {
-        if (window.confirm('Are you sure you want to delete this vehicle?')) {
-            deleteVehicle({ variables: { id } });
-        }
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteVehicle({ variables: { id } });
+                Swal.fire('Deleted!', 'Your vehicle has been deleted.', 'success');
+            } else {
+                Swal.fire('Cancelled', 'Your vehicle is safe', 'error');
+            }
+        });
     };
 
     return (
@@ -58,7 +73,7 @@ const VehicleList: React.FC<VehicleListProps> = ({ vehicles }) => {
                         <div className={styles.content}>
                             <div className={styles.title}>
                                 <h3 className={styles.cardTitle}>{vehicle.name}</h3>
-                                <div>
+                                <div className={styles.actions}>
                                     <button
                                         onClick={() => handleEdit(vehicle)} className={styles.editButton} aria-label={`Edit ${vehicle.name}`}>
                                         <Image src={add} alt='edit' height={20} width={20} />

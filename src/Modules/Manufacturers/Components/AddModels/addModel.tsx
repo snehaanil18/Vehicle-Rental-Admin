@@ -9,6 +9,8 @@ import add from '@/Themes/Images/edit-3-svgrepo-com.svg';
 import InputField from '@/Utils/Components/InputField/InputField';
 import close from '@/Themes/Images/close-circle-svgrepo-com.svg';
 import Button from '@/Utils/Components/Button/Button';
+import Swal from 'sweetalert2';
+
 
 function AddModels() {
     const { loading: loadingManufacturers, error: errorManufacturers, data: dataManufacturers } = useQuery<{ getAllManufacturers: Manufacturer[] }>(GET_ALL_MANUFACTURERS);
@@ -37,7 +39,12 @@ function AddModels() {
 
     const handleSubmit = async () => {
         if (!modelName || !selectedManufacturer) {
-            alert("Please select a manufacturer and enter a model name.");
+            Swal.fire({
+                title: 'Error!',
+                text: `Please select a manufacturer and enter a model name}`,
+                icon: 'error',
+                confirmButtonText: 'OK',
+            });
             return;
 
         }
@@ -119,6 +126,7 @@ function AddModels() {
                         <table className={styles.table}>
                             <thead>
                                 <tr>
+                                    <th>Sl. no</th>
                                     <th>Id</th>
                                     <th>Model Name</th>
                                     <th>Year</th>
@@ -126,8 +134,9 @@ function AddModels() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {dataModels?.getAllModels.map((model) => (
+                                {dataModels?.getAllModels.map((model,index) => (
                                     <tr key={model.id}>
+                                        <td>{index+1}</td>
                                         <td>{model.id}</td>
                                         <td>{model.name}</td>
                                         <td>{model.year}</td>

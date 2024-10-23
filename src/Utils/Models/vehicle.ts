@@ -45,3 +45,8 @@ export interface VehicleEdit {
     otherimages: string[];
     primaryimage: string | File;
 }
+
+export interface EditVehicleModalProps {
+    vehicle: VehicleEdit;
+    onClose: () => void;
+}

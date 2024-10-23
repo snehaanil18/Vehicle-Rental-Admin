@@ -31,7 +31,7 @@ const Sidenav = () => {
     return (
         <div className={styles.dashboard}>
             <div className={styles.sidebarContainer}>
-                <h1>Dashboard</h1>
+                <h1>Swift Cars</h1>
                 <div className={styles.sideButtons}>
                     <Image src={car} alt='car' height={20} width={20} />
                     <Button

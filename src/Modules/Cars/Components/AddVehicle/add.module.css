@@ -1,12 +1,11 @@
 .container {
-    width: 600px;
+    width: 85%;
     overflow-y: scroll;
     scrollbar-width: none;
     padding: 20px 50px;
     margin: 20px 80px;
     background-color: #f9f9f9;
     color: black;
-
 }
 
 .container form {
@@ -19,6 +18,15 @@
     font-weight: bold;
     color: black;
     margin-bottom: 5px;
+}
+
+.import{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.excel button, .import button{
+    padding: 10px;
 }
 
 .formContent select,
