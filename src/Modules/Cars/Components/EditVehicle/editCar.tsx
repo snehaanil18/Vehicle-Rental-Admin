@@ -131,7 +131,7 @@ const EditVehicle: React.FC<EditVehicleModalProps> = ({ vehicle, onClose }) => {
         try {
             await updateVehicle({
                 variables: {
-                    id: formData.id, // Ensure the vehicle id is included
+                    id: formData.id,
                     name: formData.name,
                     description: formData.description,
                     price: parseFloat(formData.price),

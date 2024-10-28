@@ -49,9 +49,8 @@
 }
 
 @media (max-width: 768px) {
-  /* Table width adjustment */
   .table {
-    font-size: 14px; /* Responsive font size in px */
+    font-size: 14px;
     margin: 10px 0;
   }
 
@@ -59,7 +58,6 @@
     padding: 10px 12px;
   }
 
-  /* Form adjustments for smaller screens */
   .addVehicleForm {
     gap: 10px;
   }
@@ -69,13 +67,11 @@
     padding: 10px;
   }
 
-  /* Image container adjustments */
   .imageContainer {
     flex-direction: column;
     align-items: center;
   }
 
-  /* Image actions adjustments */
   .imageActions {
     flex-direction: column;
     align-items: flex-start;

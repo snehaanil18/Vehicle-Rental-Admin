@@ -4,12 +4,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items:first baseline;
   overflow-y: auto;
-  z-index: 1000; /* On top of other elements */
+  z-index: 1000;
 }
 
 .modalContent {
@@ -19,9 +19,9 @@
   border-radius: 8px;
   overflow-y: auto;
   width: 90%;
-  max-width: 900px; /* Adjust as necessary */
-  position: relative; /* For positioning close button */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow */
+  max-width: 900px;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .closeButton {

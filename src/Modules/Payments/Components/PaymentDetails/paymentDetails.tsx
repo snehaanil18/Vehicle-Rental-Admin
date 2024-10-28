@@ -58,10 +58,10 @@ function PaymentList() {
 
               {expandedRow === payment.id && (
                 <tr className={styles.expandedRow}>
-                  <td colSpan={3}> {/* Set to 3 to match table header columns */}
+                  <td colSpan={3}>
                     <div className={styles.expandedContent}>
                       <p><strong>Booking Id:</strong> {payment.bookingid}</p>
-                      <p><strong>Amount:</strong> &#8377; {payment.amountpaid}</p> {/* Fixed to display amount */}
+                      <p><strong>Amount:</strong> &#8377; {payment.amountpaid}</p>
                       <p><strong>Payment Status:</strong>
                         <span className={styles.paymentstatus}>
                           {payment.status}

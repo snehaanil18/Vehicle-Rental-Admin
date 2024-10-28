@@ -88,7 +88,6 @@
     width: 100%;
 }
 
-/* Sidebar Styling */
 .sidebarContainer {
     width: 250px;
     height: 100vh;
@@ -130,7 +129,7 @@
     color: rgb(252, 156, 48);
 }
 
-/* Tab Content Styling */
+
 .tabContent {
     margin-top: 20px;
     color: #075b70;
@@ -150,9 +149,7 @@
     font-size: 18px;
 }
 
-/* Responsive Adjustments */
 @media (max-width: 768px) {
-    /* Hide the sidebar initially on smaller screens */
     .sidebarContainer {
         transform: translateX(-100%);
         position: fixed;
@@ -165,18 +162,17 @@
         box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     }
 
-    /* Show sidebar when the .showSidebar class is added */
+
     .showSidebar {
         transform: translateX(0);
     }
 
-    /* Adjust the tab content to fill the screen when sidebar is hidden */
+
     .tabContent {
         margin-left: 0;
         padding: 20px;
     }
 
-    /* Sidebar toggle button styling */
     .menuButton {
         display: block;
         font-size: 18px;
@@ -193,7 +189,6 @@
     }
     
 
-    /* Adjust font sizes for readability */
     .sidebarContainer h1 {
         font-size: 30px;
     }

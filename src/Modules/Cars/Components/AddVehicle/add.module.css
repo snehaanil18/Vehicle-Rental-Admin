@@ -159,16 +159,13 @@
     justify-content: center;
 }
 
-/* Responsive styles */
 @media (max-width: 768px) {
-    /* Center container for smaller screens */
     .container {
         width: 100%;
         padding: 15px;
         margin: 10px 0;
     }
 
-    /* Stack buttons and adjust form spacing */
     .import,
     .buttons {
         justify-content: center;
@@ -181,14 +178,12 @@
         font-size: 0.9em;
     }
 
-    /* Image container sizing for smaller screens */
     .imageContainer {
         width: 90px;
         height: 120px;
         padding: 8px;
     }
 
-    /* Responsive image actions and button */
     .imageActions label {
         font-size: 11px;
     }
