@@ -29,3 +29,28 @@
 .loading{
     margin-left: 100px;
 }
+
+@media (max-width: 768px) {
+    /* Reduce left margin when sidebar is hidden on mobile */
+    .Navbar {
+        margin-left: 0;
+        justify-content: space-between;
+        padding: 10px;
+    }
+
+    /* Center search input, reduce width on smaller screens */
+    .search input {
+        width: 100%;
+        max-width: 90vw; /* Keeps input within viewport */
+    }
+
+    /* Center loading indicator and adjust spacing */
+    .loading {
+        margin-left: 0;
+    }
+
+    /* Hide blank div for more space */
+    .blank {
+        display: none;
+    }
+}

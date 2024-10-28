@@ -117,10 +117,18 @@
     color: #929292;
 }
 
+@media (max-width: 1200px) {
+    .container {
+        margin-left: 100px;
+        width: 90%;
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         width: 100%;
         padding: 10px;
+        margin-left: 0; 
     }
 
     .table th, .table td {
@@ -131,3 +139,5 @@
         padding: 10px;
     }
 }
+
+

@@ -1,4 +1,4 @@
-@font-face {
+/* @font-face {
     font-family: 'Bangers'; 
     src: url('../../../../Themes/Fonts/Bangers/Bangers-Regular.ttf') format('truetype');
     font-weight: 500; 
@@ -72,4 +72,137 @@
     font-size: 18px;
 }
 
+   */
+
+   @font-face {
+    font-family: 'Bangers'; 
+    src: url('../../../../Themes/Fonts/Bangers/Bangers-Regular.ttf') format('truetype');
+    font-weight: 500; 
+    font-style: normal;
+}
+
+.dashboard {
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    flex-direction: row;
+    width: 100%;
+}
+
+/* Sidebar Styling */
+.sidebarContainer {
+    width: 250px;
+    height: 100vh;
+    background-color: #0e141a;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: fixed;
+    transition: transform 0.3s ease;
+}
+
+.sideButtons {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 10px;
+}
+
+.sideButtons img {
+    box-sizing: border-box;
+    margin: 5px;
+}
+
+.sidebarContainer button {
+    width: 100%;
+    font-size: 20px;
+    color: white;
+    text-align: left;
+}
   
+.sidebarContainer h1 {
+    margin-bottom: 20px;
+    font-family: "Bangers";
+    cursor: default;
+    font-size: 40px;
+    color: rgb(252, 156, 48);
+}
+
+/* Tab Content Styling */
+.tabContent {
+    margin-top: 20px;
+    color: #075b70;
+    margin-left: 250px;
+    width: 100%;
+}
+
+.settings {
+    margin: 0 30px;
+}
+
+.settings .sideButtons {
+    margin: 0;
+}
+
+.settings button {
+    font-size: 18px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    /* Hide the sidebar initially on smaller screens */
+    .sidebarContainer {
+        transform: translateX(-100%);
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 250px;
+        background-color: #0e141a;
+        z-index: 99;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Show sidebar when the .showSidebar class is added */
+    .showSidebar {
+        transform: translateX(0);
+    }
+
+    /* Adjust the tab content to fill the screen when sidebar is hidden */
+    .tabContent {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    /* Sidebar toggle button styling */
+    .menuButton {
+        display: block;
+        font-size: 24px;
+        background: black; 
+        color: white;     
+        border: none;
+        padding: 10px;
+        border-radius: 5px; 
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        cursor: pointer;
+        z-index: 100;
+    }
+    
+
+    /* Adjust font sizes for readability */
+    .sidebarContainer h1 {
+        font-size: 30px;
+    }
+
+    .sidebarContainer button {
+        font-size: 18px;
+    }
+
+    .settings button {
+        font-size: 16px;
+    }
+}

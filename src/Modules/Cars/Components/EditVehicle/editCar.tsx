@@ -83,8 +83,7 @@ const EditVehicle: React.FC<EditVehicleModalProps> = ({ vehicle, onClose }) => {
             };
           });
 
-          console.log('input1',formattedImages,'input');
-          
+
         
 
         // Check if there are any images to update

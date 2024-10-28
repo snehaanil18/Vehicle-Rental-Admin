@@ -57,7 +57,7 @@ const VehicleList: React.FC<VehicleListProps> = ({ vehicles }) => {
                 deleteVehicle({ variables: { id } });
                 Swal.fire('Deleted!', 'Your vehicle has been deleted.', 'success');
             } else {
-                Swal.fire('Cancelled', 'Your vehicle is safe', 'error');
+                Swal.fire('Cancelled', 'Vehicle deletion cancelled', 'error');
             }
         });
     };

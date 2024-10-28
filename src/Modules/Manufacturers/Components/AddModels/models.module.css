@@ -121,14 +121,42 @@
     color: #929292;
 }
 
+@media (max-width: 1200px) {
+    .container {
+        margin-left: 100px; 
+        width: 90%;
+    }
+
+    .loading, .error {
+        margin: 0 50px;
+    }
+}
+
+@media (max-width: 992px) {
+    .container {
+        margin-left: 70px;
+        width: 90%;
+    }
+
+    .addDetail {
+        margin: 20px 20px; 
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         width: 100%;
+        margin-left: 0;
         padding: 10px;
+    }
+
+    .loading, .error {
+        margin: 0 20px;
     }
 
     .table th, .table td {
         padding: 8px;
+        font-size: 12px;
     }
 
     .addDetail {

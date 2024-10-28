@@ -19,6 +19,7 @@ import PaymentView from '@/Modules/Payments/Views/paymentView';
 const Sidenav = () => {
     const [activeTab, setActiveTab] = useState('Cars');
     const [show, setShow] = useState(false)
+    const [isSidebarVisible, setSidebarVisible] = useState(false);
 
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);
@@ -28,9 +29,14 @@ const Sidenav = () => {
         setShow(!show)
     }
 
+    const toggleSidebar = () => setSidebarVisible(!isSidebarVisible);
+
     return (
         <div className={styles.dashboard}>
-            <div className={styles.sidebarContainer}>
+            <button className={styles.menuButton} onClick={toggleSidebar}>
+                &#9776;
+            </button>
+            <div className={`${styles.sidebarContainer} ${isSidebarVisible ? styles.showSidebar : ''}`}>
                 <h1>Swift Cars</h1>
                 <div className={styles.sideButtons}>
                     <Image src={car} alt='car' height={20} width={20} />
@@ -107,16 +113,16 @@ const Sidenav = () => {
 
                 </div>}
                 {activeTab === 'Customers' && <div>
-                    <CustomerView/>
+                    <CustomerView />
                 </div>}
                 {activeTab === 'Transactions' && <div>
-                    <PaymentView/>
+                    <PaymentView />
                 </div>}
                 {activeTab === 'Manufacturers' && <div>
-                    <AddManufacturers/>    
+                    <AddManufacturers />
                 </div>}
                 {activeTab === 'Models' && <div>
-                    <AddModels/>    
+                    <AddModels />
                 </div>}
             </div>
         </div>

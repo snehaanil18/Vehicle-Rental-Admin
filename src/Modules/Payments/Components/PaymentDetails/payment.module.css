@@ -4,6 +4,7 @@
     justify-content: center;
     padding: 20px;
     margin: 0 160px;
+    transition: margin 0.3s ease;
 }
 
 .container h1 {
@@ -66,4 +67,45 @@
     padding: 5px 10px;
     border-radius: 5px;
 
+}
+
+@media (max-width: 1200px) {
+   
+    .container {
+        margin: 0 100px;
+    }
+
+  
+    .bookingsTable th,
+    .bookingsTable td {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 0 20px;
+        padding: 10px;
+    }
+
+    .bookingsTable th,
+    .bookingsTable td {
+        font-size: 13px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        margin: 0 10px;
+        padding: 5px;
+    }
+
+
+    .bookingsTable th,
+    .bookingsTable td {
+        font-size: 12px;
+        padding: 5px;
+    }
 }

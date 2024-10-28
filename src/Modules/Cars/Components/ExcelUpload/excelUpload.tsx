@@ -12,7 +12,7 @@ import Image from 'next/image';
 const ExcelUpload: React.FC<DataDisplayProps> = ({ data }) => {
   const [selectedVehicleIndex, setSelectedVehicleIndex] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
- 
+
   const [vehicleDetails, setVehicleDetails] = useState<{ images: File[] }>({ images: [] });
   const [primaryimageindex, setPrimaryimageindex] = useState<number | null>(null);
   const [addVehicle] = useMutation(ADD_VEHICLE_MUTATION);
@@ -61,19 +61,19 @@ const ExcelUpload: React.FC<DataDisplayProps> = ({ data }) => {
     try {
       if (selectedVehicleIndex !== null) {
         const selectedVehicle = data[selectedVehicleIndex];
-  
-      
-        
+
+
+
         // Check if images is an array
         if (!Array.isArray(vehicleDetails.images)) {
           console.error("Images should be an array");
           return;
         }
-  
+
         const { name, description, price, vehicletype, model, manufacturer, transmission, fueltype, quantity } = selectedVehicle;
-  
-       
-  
+
+
+
         // Call the addVehicle mutation
         await addVehicle({
           variables: {
@@ -86,12 +86,12 @@ const ExcelUpload: React.FC<DataDisplayProps> = ({ data }) => {
             transmission,
             fueltype,
             vehicletype,
-            images: vehicleDetails.images, 
-            primaryimageindex: primaryimageindex ?? 0, 
+            images: vehicleDetails.images,
+            primaryimageindex: primaryimageindex ?? 0,
           },
         });
 
-  
+
         Swal.fire({
           title: 'Success!',
           text: 'Vehicle added',
@@ -99,8 +99,8 @@ const ExcelUpload: React.FC<DataDisplayProps> = ({ data }) => {
           confirmButtonText: 'OK',
         });
         closeModal();
-        
-        
+
+
       }
     } catch (error) {
       console.error('Error adding vehicle:', error);
@@ -112,7 +112,6 @@ const ExcelUpload: React.FC<DataDisplayProps> = ({ data }) => {
       });
     }
   };
-  
 
   return (
     <div>
@@ -134,7 +133,7 @@ const ExcelUpload: React.FC<DataDisplayProps> = ({ data }) => {
         </thead>
         <tbody>
           {data.map((item, index) => (
-            <tr key={index+1} className={styles.tr}>
+            <tr key={index + 1} className={styles.tr}>
               <td className={styles.td}>{item.name}</td>
               <td className={styles.td}>{item.description}</td>
               <td className={styles.td}>{item.price}</td>
@@ -153,8 +152,8 @@ const ExcelUpload: React.FC<DataDisplayProps> = ({ data }) => {
       </table>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
+
         <div className={styles.addVehicleForm}>
-          
           <label htmlFor="image">Upload Images:</label>
           <input type="file" multiple onChange={handleImageChange} />
 
@@ -183,7 +182,7 @@ const ExcelUpload: React.FC<DataDisplayProps> = ({ data }) => {
           <div className={styles.button}>
             <button onClick={handleAddVehicle}>ADD Vehicle</button>
           </div>
-          
+
         </div>
       </Modal>
     </div>

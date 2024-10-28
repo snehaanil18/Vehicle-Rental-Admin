@@ -48,7 +48,17 @@ function AddModels() {
             return;
 
         }
-        console.log('button',modelName,year,selectedManufacturer);
+
+        if (!year) {
+            Swal.fire({
+                title: 'Error!',
+                text: `Please enter a valid year.`,
+                icon: 'error',
+                confirmButtonText: 'OK',
+            });
+            return;
+        }
+
         
         try {
             await addModel({
@@ -106,6 +116,7 @@ function AddModels() {
                             label="Model Name"
                             type="text"
                             name="modelName"
+                            placeholder='Enter model name'
                             value={modelName}
                             onChange={(e) => setModelName(e.target.value)}
                         />
@@ -113,6 +124,7 @@ function AddModels() {
                         <InputField
                             label="Year"
                             type="text"
+                            placeholder='Enter year'
                             name="year"
                             value={year}
                             onChange={(e) => setYear(e.target.value)}
