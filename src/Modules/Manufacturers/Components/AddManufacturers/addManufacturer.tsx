@@ -84,12 +84,7 @@ function AddManufacturers() {
                             </tbody>
                         </table>
                     </div>
-
                 }
-
-
-
-
             </div>
         </div>
     )

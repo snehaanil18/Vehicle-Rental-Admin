@@ -15,7 +15,6 @@ import Swal from 'sweetalert2';
 function AddModels() {
     const { loading: loadingManufacturers, error: errorManufacturers, data: dataManufacturers } = useQuery<{ getAllManufacturers: Manufacturer[] }>(GET_ALL_MANUFACTURERS);
     const { loading: loadingModels, error: errorModels, data: dataModels } = useQuery<{ getAllModels: Model[] }>(GET_ALL_MODELS);
-
     const [show, setShow] = useState(false);
     const [modelName, setModelName] = useState("");
     const [year, setYear] = useState("");
@@ -29,7 +28,7 @@ function AddModels() {
             setSelectedManufacturer(null);
         },
         onError: (error) => {
-            console.error('Error adding model:', error); // Highlighted change: Error handling
+            console.error('Error adding model:', error);
         },
     });
 
@@ -59,7 +58,6 @@ function AddModels() {
             return;
         }
 
-        
         try {
             await addModel({
                 variables: {
@@ -101,7 +99,7 @@ function AddModels() {
                         <select
                             name="Manufacturers"
                             id="manufacturerSelect"
-                            value={selectedManufacturer || ""}
+                            value={selectedManufacturer ?? ""}
                             onChange={(e) => setSelectedManufacturer(e.target.value)}
                         >
                             <option value="" disabled>Select a manufacturer</option>

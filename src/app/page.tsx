@@ -1,11 +1,11 @@
 import React from 'react'
-import DashboardView from '@/Modules/Admin/Views/dashboardView'
+// import DashboardView from '@/Modules/Admin/Views/dashboardView'
+import Login from '@/Modules/Login/Views/loginView'
 
 function Page() {
   return (
     <div>
-{/* <VehicleView/> */}
-    <DashboardView/>
+    <Login/>
     </div>
   )
 }

@@ -8,8 +8,6 @@ import { useMutation } from '@apollo/client';
 import { UPDATE_VEHICLE, UPDATE_VEHICLE_IMAGES } from '../../Services/mutations';
 import Swal from 'sweetalert2';
 
-
-
 const EditVehicle: React.FC<EditVehicleModalProps> = ({ vehicle, onClose }) => {
     const [formData, setFormData] = useState(vehicle);
     const [newImages, setNewImages] = useState<File[]>([]);
@@ -83,8 +81,6 @@ const EditVehicle: React.FC<EditVehicleModalProps> = ({ vehicle, onClose }) => {
             };
           });
 
-
-        
 
         // Check if there are any images to update
         if (filteredImages.length === 0) {
@@ -220,7 +216,7 @@ const EditVehicle: React.FC<EditVehicleModalProps> = ({ vehicle, onClose }) => {
                             <h3>Other Images</h3>
                             {formData.otherimages.length > 0 ? (
                                 formData.otherimages.map((img: string, index: number) => (
-                                    <div key={index} className={styles.imagePreview}>
+                                    <div key={index+1} className={styles.imagePreview}>
                                         <Image src={img} alt='other' className={styles.image} height={100} width={100} />
                                         <button type="button" onClick={() => removeExistingImage(img, 'other')}>
                                             Remove
@@ -243,7 +239,7 @@ const EditVehicle: React.FC<EditVehicleModalProps> = ({ vehicle, onClose }) => {
                                 <div>
                                     <h3>New Images Preview</h3>
                                     {newImages.map((img, index) => (
-                                        <div key={index} className={styles.imagePreview}>
+                                        <div key={index+1} className={styles.imagePreview}>
                                             <Image src={URL.createObjectURL(img)} alt={`New image ${index + 1}`} height={100} width={100} className={styles.image} />
                                             <button type="button" onClick={() => removeNewImage(img)}>
                                                 Remove

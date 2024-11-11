@@ -160,7 +160,7 @@ const ExcelUpload: React.FC<DataDisplayProps> = ({ data }) => {
           {vehicleDetails.images.length > 0 && (
             <div className={styles.imagePreview}>
               {vehicleDetails.images.map((image, index) => (
-                <div key={index} className={styles.imageContainer}>
+                <div key={index+1} className={styles.imageContainer}>
                   <Image src={URL.createObjectURL(image)} alt={`Image ${index + 1}`} height={100} width={115} />
                   <div className={styles.imageActions}>
                     <label>
